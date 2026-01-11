@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload, FiMinimize2, FiMaximize2 } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 import '../ToolPage.css';
 
 function JsonFormatter() {
@@ -25,7 +25,6 @@ function JsonFormatter() {
     try {
       const parsed = JSON.parse(input);
       
-      // Calculate stats
       const keyCount = countKeys(parsed);
       setStats({
         keys: keyCount,
@@ -104,7 +103,7 @@ function JsonFormatter() {
     }
   };
 
-  const sampleJson = `{"users":[{"id":1,"name":"John Doe","email":"john@example.com","address":{"city":"New York","country":"USA"}},{"id":2,"name":"Jane Smith","email":"jane@example.com","address":{"city":"London","country":"UK"}}],"metadata":{"total":2,"page":1}}`;
+  const sampleJson = `{"users":[{"id":1,"name":"John Doe","email":"john@example.com"},{"id":2,"name":"Jane Smith","email":"jane@example.com"}],"total":2}`;
 
   return (
     <div className="tool-page">
@@ -120,11 +119,10 @@ function JsonFormatter() {
       <div className="options-panel">
         <div className="options-grid">
           <div className="option-group">
-            <label>Indent Spaces</label>
+            <label>Indent</label>
             <select value={options.indent} onChange={(e) => setOptions({ ...options, indent: parseInt(e.target.value) })}>
               <option value="2">2 spaces</option>
               <option value="4">4 spaces</option>
-              <option value="8">8 spaces</option>
             </select>
           </div>
           <div className="checkbox-group">
@@ -134,26 +132,20 @@ function JsonFormatter() {
               checked={options.sortKeys}
               onChange={(e) => setOptions({ ...options, sortKeys: e.target.checked })}
             />
-            <label htmlFor="sortKeys">Sort keys alphabetically</label>
+            <label htmlFor="sortKeys">Sort keys</label>
           </div>
         </div>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={() => formatJson(false)}>
-            <FiMaximize2 /> Beautify
-          </button>
-          <button className="btn btn-secondary" onClick={() => formatJson(true)}>
-            <FiMinimize2 /> Minify
-          </button>
           <label className="btn btn-secondary">
-            <FiUpload /> Upload JSON
+            <FiUpload /> Upload
             <input type="file" accept=".json" onChange={handleFileUpload} hidden />
           </label>
           <button className="btn btn-secondary" onClick={() => setInput(sampleJson)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -163,15 +155,15 @@ function JsonFormatter() {
         </div>
       </div>
 
-      {/* Stats Bar */}
       {stats && (
-        <div className="status-message info" style={{ marginBottom: '1rem', marginTop: 0 }}>
-          ✓ Valid JSON | Type: {stats.type} | Keys: {stats.keys} | Size: {stats.size} bytes
+        <div className="status-message info" style={{ marginBottom: '0.75rem', marginTop: 0 }}>
+          ✓ Valid JSON | {stats.type} | {stats.keys} keys | {stats.size} bytes
         </div>
       )}
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>JSON Input</h3>
@@ -187,14 +179,26 @@ function JsonFormatter() {
           </div>
         </div>
 
+        {/* Format Buttons in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={() => formatJson(false)}>
+            <FiMaximize2 />
+            Beautify
+          </button>
+          <button className="btn-secondary-small" onClick={() => formatJson(true)}>
+            <FiMinimize2 /> Minify
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
-            <h3>Formatted Output</h3>
+            <h3>Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download JSON">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

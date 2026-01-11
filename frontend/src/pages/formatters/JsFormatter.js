@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 import '../ToolPage.css';
 
 function JsFormatter() {
@@ -17,15 +17,11 @@ function JsFormatter() {
     const indent = ' '.repeat(options.indent);
     let js = input;
 
-    // Remove existing formatting
     js = js.replace(/\s+/g, ' ');
-    
-    // Add newlines
     js = js.replace(/;/g, ';\n');
     js = js.replace(/\{/g, ' {\n');
     js = js.replace(/\}/g, '\n}\n');
     
-    // Format each line with proper indentation
     let formatted = '';
     let indentLevel = 0;
     
@@ -33,23 +29,19 @@ function JsFormatter() {
       line = line.trim();
       if (!line) return;
       
-      // Decrease indent before closing brace
       if (line.startsWith('}') || line.startsWith(']')) {
         indentLevel = Math.max(0, indentLevel - 1);
       }
       
       formatted += indent.repeat(indentLevel) + line + '\n';
       
-      // Increase indent after opening brace
       if (line.endsWith('{') || line.endsWith('[')) {
         indentLevel++;
       }
     });
 
-    // Clean up
     formatted = formatted.replace(/\n{3,}/g, '\n\n');
     
-    // Handle semicolons option
     if (!options.semicolons) {
       formatted = formatted.replace(/;$/gm, '');
     }
@@ -59,17 +51,12 @@ function JsFormatter() {
 
   const minifyJs = () => {
     if (!input.trim()) return;
-    
     let js = input;
-    // Remove comments
     js = js.replace(/\/\/.*$/gm, '');
     js = js.replace(/\/\*[\s\S]*?\*\//g, '');
-    // Remove whitespace
     js = js.replace(/\s+/g, ' ');
-    // Remove space around operators
     js = js.replace(/\s*([{}();,:])\s*/g, '$1');
     js = js.replace(/\s*=\s*/g, '=');
-    
     setOutput(js.trim());
   };
 
@@ -96,7 +83,7 @@ function JsFormatter() {
     setOutput('');
   };
 
-  const sampleJs = `function calculateTotal(items){let total=0;items.forEach(item=>{if(item.price&&item.quantity){total+=item.price*item.quantity;}});return total;}const cart=[{name:"Apple",price:1.5,quantity:3},{name:"Banana",price:0.75,quantity:5}];console.log("Total:",calculateTotal(cart));`;
+  const sampleJs = `function hello(name){const msg="Hello, "+name;console.log(msg);return msg;}const result=hello("World");`;
 
   return (
     <div className="tool-page">
@@ -112,7 +99,7 @@ function JsFormatter() {
       <div className="options-panel">
         <div className="options-grid">
           <div className="option-group">
-            <label>Indent Spaces</label>
+            <label>Indent</label>
             <select value={options.indent} onChange={(e) => setOptions({ ...options, indent: parseInt(e.target.value) })}>
               <option value="2">2 spaces</option>
               <option value="4">4 spaces</option>
@@ -125,22 +112,16 @@ function JsFormatter() {
               checked={options.semicolons}
               onChange={(e) => setOptions({ ...options, semicolons: e.target.checked })}
             />
-            <label htmlFor="semicolons">Use semicolons</label>
+            <label htmlFor="semicolons">Semicolons</label>
           </div>
         </div>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={formatJs}>
-            Beautify JS
-          </button>
-          <button className="btn btn-secondary" onClick={minifyJs}>
-            Minify JS
-          </button>
           <button className="btn btn-secondary" onClick={() => setInput(sampleJs)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -150,8 +131,9 @@ function JsFormatter() {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>JavaScript Input</h3>
@@ -167,14 +149,26 @@ function JsFormatter() {
           </div>
         </div>
 
+        {/* Format Buttons in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={formatJs}>
+            <FiMaximize2 />
+            Beautify
+          </button>
+          <button className="btn-secondary-small" onClick={minifyJs}>
+            <FiMinimize2 /> Minify
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
-            <h3>Formatted Output</h3>
+            <h3>Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download JS">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

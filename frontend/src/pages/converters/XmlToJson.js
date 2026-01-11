@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload, FiArrowRight } from 'react-icons/fi';
 import '../ToolPage.css';
 
 function XmlToJson() {
@@ -12,7 +12,6 @@ function XmlToJson() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'text/xml');
     
-    // Check for parse errors
     const parseError = doc.querySelector('parsererror');
     if (parseError) {
       throw new Error('Invalid XML: ' + parseError.textContent);
@@ -21,7 +20,6 @@ function XmlToJson() {
     const convertNode = (node) => {
       const obj = {};
       
-      // Handle attributes
       if (node.attributes && node.attributes.length > 0) {
         obj['@attributes'] = {};
         for (let i = 0; i < node.attributes.length; i++) {
@@ -30,12 +28,11 @@ function XmlToJson() {
         }
       }
       
-      // Handle child nodes
       if (node.childNodes && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++) {
           const child = node.childNodes[i];
           
-          if (child.nodeType === 1) { // Element node
+          if (child.nodeType === 1) {
             const childName = child.nodeName;
             const childValue = convertNode(child);
             
@@ -47,7 +44,7 @@ function XmlToJson() {
             } else {
               obj[childName] = childValue;
             }
-          } else if (child.nodeType === 3) { // Text node
+          } else if (child.nodeType === 3) {
             const text = child.textContent.trim();
             if (text) {
               if (Object.keys(obj).length === 0) {
@@ -118,12 +115,10 @@ function XmlToJson() {
   <user id="1">
     <name>John Doe</name>
     <email>john@example.com</email>
-    <age>28</age>
   </user>
   <user id="2">
     <name>Jane Smith</name>
     <email>jane@example.com</email>
-    <age>34</age>
   </user>
 </users>`;
 
@@ -137,18 +132,15 @@ function XmlToJson() {
         <p>Convert XML data to JSON format</p>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={convert}>
-            Convert to JSON
-          </button>
           <label className="btn btn-secondary">
-            <FiUpload /> Upload XML
+            <FiUpload /> Upload
             <input type="file" accept=".xml" onChange={handleFileUpload} hidden />
           </label>
           <button className="btn btn-secondary" onClick={() => setInput(sampleXml)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -158,8 +150,9 @@ function XmlToJson() {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>XML Input</h3>
@@ -175,14 +168,23 @@ function XmlToJson() {
           </div>
         </div>
 
+        {/* Convert Button in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={convert}>
+            <FiArrowRight />
+            Convert
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>JSON Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download JSON">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

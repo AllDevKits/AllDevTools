@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload, FiArrowRight } from 'react-icons/fi';
 import '../ToolPage.css';
 
 function HtmlToMarkdown() {
@@ -11,7 +11,6 @@ function HtmlToMarkdown() {
   const htmlToMarkdown = (html) => {
     let md = html;
 
-    // Handle headings
     md = md.replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n');
     md = md.replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n');
     md = md.replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n');
@@ -19,25 +18,19 @@ function HtmlToMarkdown() {
     md = md.replace(/<h5[^>]*>(.*?)<\/h5>/gi, '##### $1\n\n');
     md = md.replace(/<h6[^>]*>(.*?)<\/h6>/gi, '###### $1\n\n');
 
-    // Handle bold and italic
     md = md.replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**');
     md = md.replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**');
     md = md.replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*');
     md = md.replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*');
 
-    // Handle links
     md = md.replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)');
-
-    // Handle images
     md = md.replace(/<img[^>]*src="([^"]*)"[^>]*alt="([^"]*)"[^>]*\/?>/gi, '![$2]($1)');
     md = md.replace(/<img[^>]*src="([^"]*)"[^>]*\/?>/gi, '![]($1)');
 
-    // Handle code
     md = md.replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`');
     md = md.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, '```\n$1\n```\n\n');
     md = md.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, '```\n$1\n```\n\n');
 
-    // Handle lists
     md = md.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (match, content) => {
       return content.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n') + '\n';
     });
@@ -49,28 +42,17 @@ function HtmlToMarkdown() {
       }) + '\n';
     });
 
-    // Handle blockquotes
     md = md.replace(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi, (match, content) => {
       return content.split('\n').map(line => `> ${line.trim()}`).join('\n') + '\n\n';
     });
 
-    // Handle paragraphs
     md = md.replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n');
-
-    // Handle line breaks
     md = md.replace(/<br\s*\/?>/gi, '\n');
-
-    // Handle horizontal rules
     md = md.replace(/<hr\s*\/?>/gi, '\n---\n\n');
-
-    // Remove remaining HTML tags
     md = md.replace(/<[^>]+>/g, '');
-
-    // Clean up whitespace
     md = md.replace(/\n{3,}/g, '\n\n');
     md = md.trim();
 
-    // Decode HTML entities
     const textarea = document.createElement('textarea');
     textarea.innerHTML = md;
     md = textarea.value;
@@ -127,25 +109,13 @@ function HtmlToMarkdown() {
   };
 
   const sampleHtml = `<h1>Welcome to HTML</h1>
-<p>This is a <strong>bold</strong> and <em>italic</em> text example.</p>
-
+<p>This is a <strong>bold</strong> and <em>italic</em> text.</p>
 <h2>Features</h2>
 <ul>
   <li>Easy to learn</li>
   <li>Clean syntax</li>
-  <li>Widely supported</li>
 </ul>
-
-<h3>Code Example</h3>
-<pre><code>const greeting = "Hello, World!";
-console.log(greeting);</code></pre>
-
-<h3>Links</h3>
-<p>Visit <a href="https://github.com">GitHub</a> for more.</p>
-
-<blockquote>
-  This is a blockquote. It's great for highlighting important information.
-</blockquote>`;
+<p>Visit <a href="https://github.com">GitHub</a></p>`;
 
   return (
     <div className="tool-page">
@@ -157,18 +127,15 @@ console.log(greeting);</code></pre>
         <p>Convert HTML code to clean Markdown format</p>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={convert}>
-            Convert to Markdown
-          </button>
           <label className="btn btn-secondary">
-            <FiUpload /> Upload HTML
+            <FiUpload /> Upload
             <input type="file" accept=".html,.htm" onChange={handleFileUpload} hidden />
           </label>
           <button className="btn btn-secondary" onClick={() => setInput(sampleHtml)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -178,8 +145,9 @@ console.log(greeting);</code></pre>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>HTML Input</h3>
@@ -195,14 +163,23 @@ console.log(greeting);</code></pre>
           </div>
         </div>
 
+        {/* Convert Button in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={convert}>
+            <FiArrowRight />
+            Convert
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>Markdown Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download Markdown">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

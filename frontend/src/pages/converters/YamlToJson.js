@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiUpload, FiArrowRight } from 'react-icons/fi';
 import yaml from 'js-yaml';
 import '../ToolPage.css';
 
@@ -66,14 +66,11 @@ app:
 database:
   host: localhost
   port: 5432
-  name: myapp_db
 
 users:
   - name: John Doe
-    email: john@example.com
     role: admin
   - name: Jane Smith
-    email: jane@example.com
     role: user`;
 
   return (
@@ -86,18 +83,15 @@ users:
         <p>Convert YAML configuration to JSON format</p>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={convert}>
-            Convert to JSON
-          </button>
           <label className="btn btn-secondary">
-            <FiUpload /> Upload YAML
+            <FiUpload /> Upload
             <input type="file" accept=".yaml,.yml" onChange={handleFileUpload} hidden />
           </label>
           <button className="btn btn-secondary" onClick={() => setInput(sampleYaml)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -107,8 +101,9 @@ users:
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>YAML Input</h3>
@@ -124,14 +119,23 @@ users:
           </div>
         </div>
 
+        {/* Convert Button in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={convert}>
+            <FiArrowRight />
+            Convert
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>JSON Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download JSON">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

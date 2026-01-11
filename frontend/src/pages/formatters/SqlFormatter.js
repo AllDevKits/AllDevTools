@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiDatabase, FiCheck } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiDatabase, FiCheck, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 import '../ToolPage.css';
 
 function SqlFormatter() {
@@ -15,53 +15,20 @@ function SqlFormatter() {
     if (!input.trim()) return;
 
     let sql = input;
-
-    // Keywords that should start on new line
     const newLineKeywords = [
       'SELECT', 'FROM', 'WHERE', 'AND', 'OR', 'ORDER BY', 'GROUP BY', 
-      'HAVING', 'LIMIT', 'OFFSET', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN',
-      'INNER JOIN', 'OUTER JOIN', 'CROSS JOIN', 'ON', 'SET', 'VALUES',
-      'INSERT INTO', 'UPDATE', 'DELETE FROM', 'CREATE TABLE', 'ALTER TABLE',
-      'DROP TABLE', 'CREATE INDEX', 'UNION', 'UNION ALL', 'EXCEPT', 'INTERSECT'
+      'HAVING', 'LIMIT', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN',
+      'ON', 'SET', 'VALUES', 'INSERT INTO', 'UPDATE', 'DELETE FROM'
     ];
 
-    // Replace multiple spaces with single space
     sql = sql.replace(/\s+/g, ' ').trim();
 
-    // Add new lines before keywords
     newLineKeywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
       sql = sql.replace(regex, `\n${options.uppercase ? keyword : keyword.toLowerCase()}`);
     });
 
-    // Handle commas - put fields on new lines
     sql = sql.replace(/,\s*/g, ',\n' + ' '.repeat(options.indent));
-
-    // Handle parentheses
-    sql = sql.replace(/\(\s*/g, '(\n' + ' '.repeat(options.indent));
-    sql = sql.replace(/\s*\)/g, '\n)');
-
-    // Uppercase keywords if option is set
-    if (options.uppercase) {
-      const keywords = [
-        'SELECT', 'FROM', 'WHERE', 'AND', 'OR', 'NOT', 'IN', 'IS', 'NULL',
-        'AS', 'ON', 'JOIN', 'LEFT', 'RIGHT', 'INNER', 'OUTER', 'CROSS',
-        'ORDER', 'BY', 'GROUP', 'HAVING', 'LIMIT', 'OFFSET', 'ASC', 'DESC',
-        'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE', 'CREATE',
-        'TABLE', 'ALTER', 'DROP', 'INDEX', 'PRIMARY', 'KEY', 'FOREIGN',
-        'REFERENCES', 'UNIQUE', 'CHECK', 'DEFAULT', 'CONSTRAINT',
-        'UNION', 'ALL', 'EXCEPT', 'INTERSECT', 'BETWEEN', 'LIKE', 'EXISTS',
-        'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'CAST', 'CONVERT',
-        'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'DISTINCT', 'TRUE', 'FALSE'
-      ];
-      
-      keywords.forEach(keyword => {
-        const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-        sql = sql.replace(regex, keyword);
-      });
-    }
-
-    // Clean up extra newlines
     sql = sql.replace(/\n{3,}/g, '\n\n');
     sql = sql.trim();
 
@@ -70,15 +37,12 @@ function SqlFormatter() {
 
   const minifySql = () => {
     if (!input.trim()) return;
-    
     let sql = input;
     sql = sql.replace(/\s+/g, ' ');
     sql = sql.replace(/\s*,\s*/g, ',');
     sql = sql.replace(/\s*\(\s*/g, '(');
     sql = sql.replace(/\s*\)\s*/g, ')');
-    sql = sql.trim();
-    
-    setOutput(sql);
+    setOutput(sql.trim());
   };
 
   const handleCopy = async () => {
@@ -104,7 +68,7 @@ function SqlFormatter() {
     setOutput('');
   };
 
-  const sampleSql = `select users.id, users.name, users.email, orders.total from users left join orders on users.id = orders.user_id where users.active = true and orders.status = 'completed' order by orders.total desc limit 10`;
+  const sampleSql = `select users.id, users.name, orders.total from users left join orders on users.id = orders.user_id where users.active = true order by orders.total desc limit 10`;
 
   return (
     <div className="tool-page">
@@ -120,7 +84,7 @@ function SqlFormatter() {
       <div className="options-panel">
         <div className="options-grid">
           <div className="option-group">
-            <label>Indent Spaces</label>
+            <label>Indent</label>
             <select value={options.indent} onChange={(e) => setOptions({ ...options, indent: parseInt(e.target.value) })}>
               <option value="2">2 spaces</option>
               <option value="4">4 spaces</option>
@@ -138,17 +102,11 @@ function SqlFormatter() {
         </div>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={formatSql}>
-            Beautify SQL
-          </button>
-          <button className="btn btn-secondary" onClick={minifySql}>
-            Minify SQL
-          </button>
           <button className="btn btn-secondary" onClick={() => setInput(sampleSql)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -158,8 +116,9 @@ function SqlFormatter() {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>SQL Input</h3>
@@ -175,14 +134,26 @@ function SqlFormatter() {
           </div>
         </div>
 
+        {/* Format Buttons in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={formatSql}>
+            <FiMaximize2 />
+            Beautify
+          </button>
+          <button className="btn-secondary-small" onClick={minifySql}>
+            <FiMinimize2 /> Minify
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
-            <h3>Formatted Output</h3>
+            <h3>Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download SQL">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

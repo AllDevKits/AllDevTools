@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiFileText, FiCheck, FiUpload } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiFileText, FiCheck, FiUpload, FiArrowRight } from 'react-icons/fi';
 import Papa from 'papaparse';
 import '../ToolPage.css';
 
@@ -116,18 +116,15 @@ function JsonToCsv() {
         </div>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={convert}>
-            Convert to CSV
-          </button>
           <label className="btn btn-secondary">
-            <FiUpload /> Upload JSON
+            <FiUpload /> Upload
             <input type="file" accept=".json" onChange={handleFileUpload} hidden />
           </label>
           <button className="btn btn-secondary" onClick={() => setInput(sampleJson)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -137,8 +134,9 @@ function JsonToCsv() {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>JSON Input</h3>
@@ -154,14 +152,23 @@ function JsonToCsv() {
           </div>
         </div>
 
+        {/* Convert Button in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={convert}>
+            <FiArrowRight />
+            Convert
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>CSV Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download CSV">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiCode, FiFileText, FiTool, FiClock, FiChevronDown, FiChevronRight, FiHome, FiZap, FiSun, FiMoon } from 'react-icons/fi';
+import { FiMenu, FiX, FiCode, FiFileText, FiTool, FiClock, FiChevronDown, FiChevronRight, FiHome, FiZap, FiSun, FiMoon, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
 import './Layout.css';
 
@@ -60,7 +60,7 @@ function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState(['converters']);
   const location = useLocation();
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
 
   const toggleSection = (sectionId) => {
     setExpandedSections(prev => 
@@ -74,6 +74,10 @@ function Layout({ children }) {
   
   const isActiveSection = (section) => {
     return section.items.some(item => location.pathname === item.path);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   return (
@@ -95,18 +99,13 @@ function Layout({ children }) {
             <div className="logo-icon">
               <FiZap />
             </div>
-            <span className="logo-text">
-              <span className="logo-main">AllDev</span>
-              <span className="logo-accent">Tools</span>
-            </span>
+            {sidebarOpen && (
+              <span className="logo-text">
+                <span className="logo-main">AllDev</span>
+                <span className="logo-accent">Tools</span>
+              </span>
+            )}
           </Link>
-          <button 
-            className="sidebar-toggle desktop-only"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-label="Toggle sidebar"
-          >
-            <FiMenu />
-          </button>
         </div>
 
         {/* Navigation */}
@@ -117,7 +116,7 @@ function Layout({ children }) {
             onClick={() => setMobileOpen(false)}
           >
             <FiHome />
-            <span>Home</span>
+            {sidebarOpen && <span>Home</span>}
           </Link>
 
           {menuItems.map((section) => (
@@ -125,49 +124,52 @@ function Layout({ children }) {
               <button
                 className={`nav-section-header ${isActiveSection(section) ? 'active' : ''}`}
                 onClick={() => toggleSection(section.id)}
+                title={!sidebarOpen ? section.title : ''}
               >
                 <div className="section-header-left">
                   <span className="section-icon">{section.icon}</span>
-                  <span className="section-title">{section.title}</span>
+                  {sidebarOpen && <span className="section-title">{section.title}</span>}
                 </div>
-                <span className="section-chevron">
-                  {expandedSections.includes(section.id) ? <FiChevronDown /> : <FiChevronRight />}
-                </span>
+                {sidebarOpen && (
+                  <span className="section-chevron">
+                    {expandedSections.includes(section.id) ? <FiChevronDown /> : <FiChevronRight />}
+                  </span>
+                )}
               </button>
               
-              <div className={`nav-section-items ${expandedSections.includes(section.id) ? 'expanded' : ''}`}>
-                {section.items.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`nav-item ${isActiveItem(item.path) ? 'active' : ''}`}
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
+              {sidebarOpen && (
+                <div className={`nav-section-items ${expandedSections.includes(section.id) ? 'expanded' : ''}`}>
+                  {section.items.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`nav-item ${isActiveItem(item.path) ? 'active' : ''}`}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
 
-        {/* Footer with Theme Toggle */}
+        {/* Footer */}
         <div className="sidebar-footer">
-          <button 
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            <div className={`theme-toggle-track ${isDark ? 'dark' : 'light'}`}>
-              <div className="theme-toggle-thumb">
-                {isDark ? <FiMoon /> : <FiSun />}
-              </div>
-            </div>
-            <span className="theme-label">{isDark ? 'Dark' : 'Light'}</span>
-          </button>
-          <div className="version-badge">v1.0.0</div>
+          {sidebarOpen && <div className="version-badge">v1.0.0</div>}
         </div>
       </aside>
+
+      {/* Sidebar Toggle Button */}
+      <button 
+        className={`sidebar-collapse-btn ${sidebarOpen ? '' : 'collapsed'}`}
+        onClick={toggleSidebar}
+        aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+        title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+      >
+        {sidebarOpen ? <FiChevronsLeft /> : <FiChevronsRight />}
+      </button>
 
       {/* Mobile Overlay */}
       {mobileOpen && (
@@ -179,7 +181,48 @@ function Layout({ children }) {
 
       {/* Main Content */}
       <main className={`main-content ${sidebarOpen ? '' : 'expanded'}`}>
-        {children}
+        {/* Top Header Bar with Theme Toggle */}
+        <header className="top-header">
+          <div className="header-left-content"></div>
+          <div className="header-right-content">
+            <button 
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              <div className={`toggle-track ${isDark ? 'dark' : 'light'}`}>
+                <div className="toggle-thumb">
+                  {isDark ? <FiMoon /> : <FiSun />}
+                </div>
+              </div>
+              <span className="toggle-label">{isDark ? 'Dark' : 'Light'}</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Top Banner Placeholder */}
+        <div className="top-banner-slot"></div>
+
+        {/* Main Content Area with Side Slots */}
+        <div className="content-wrapper">
+          {/* Left Side Slot */}
+          <div className="side-slot left-slot"></div>
+
+          {/* Page Content */}
+          <div className="page-content">
+            {children}
+          </div>
+
+          {/* Right Side Slot */}
+          <div className="side-slot right-slot"></div>
+        </div>
+
+        {/* Footer */}
+        <footer className="main-footer">
+          <div className="footer-content">
+            <p>© 2026 AllDevTools. Built with ❤️ for developers.</p>
+          </div>
+        </footer>
       </main>
     </div>
   );

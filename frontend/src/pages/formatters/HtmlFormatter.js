@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck } from 'react-icons/fi';
+import { FiCopy, FiDownload, FiRefreshCw, FiCode, FiCheck, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 import '../ToolPage.css';
 
 function HtmlFormatter() {
@@ -17,16 +17,9 @@ function HtmlFormatter() {
     let formatted = '';
     let indentLevel = 0;
     
-    // Self-closing tags
     const selfClosing = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
-    
-    // Inline tags
-    const inlineTags = ['a', 'abbr', 'b', 'bdo', 'br', 'button', 'cite', 'code', 'dfn', 'em', 'i', 'img', 'input', 'kbd', 'label', 'map', 'object', 'output', 'q', 'samp', 'script', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'textarea', 'time', 'var'];
 
-    // Remove existing formatting
     let html = input.replace(/>\s+</g, '><').trim();
-    
-    // Add markers for processing
     html = html.replace(/</g, '\n<');
     
     const lines = html.split('\n').filter(line => line.trim());
@@ -35,7 +28,6 @@ function HtmlFormatter() {
       line = line.trim();
       if (!line) return;
       
-      // Check if it's a closing tag
       const closingMatch = line.match(/^<\/(\w+)/);
       const openingMatch = line.match(/^<(\w+)/);
       const selfClosingMatch = line.match(/\/>$/);
@@ -47,7 +39,6 @@ function HtmlFormatter() {
         const tagName = openingMatch[1].toLowerCase();
         formatted += indent.repeat(indentLevel) + line + '\n';
         
-        // Only increase indent if not self-closing and not inline
         if (!selfClosing.includes(tagName) && !selfClosingMatch && !line.includes(`</${tagName}>`)) {
           indentLevel++;
         }
@@ -56,22 +47,17 @@ function HtmlFormatter() {
       }
     });
 
+    formatted = formatted.replace(/\n{3,}/g, '\n\n');
     setOutput(formatted.trim());
   };
 
   const minifyHtml = () => {
     if (!input.trim()) return;
-    
     let html = input;
-    // Remove comments
     html = html.replace(/<!--[\s\S]*?-->/g, '');
-    // Remove whitespace between tags
     html = html.replace(/>\s+</g, '><');
-    // Remove leading/trailing whitespace
     html = html.replace(/^\s+|\s+$/gm, '');
-    // Collapse multiple spaces
     html = html.replace(/\s{2,}/g, ' ');
-    
     setOutput(html.trim());
   };
 
@@ -98,7 +84,7 @@ function HtmlFormatter() {
     setOutput('');
   };
 
-  const sampleHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body><header><nav><ul><li><a href="#">Home</a></li><li><a href="#">About</a></li></ul></nav></header><main><article><h1>Hello World</h1><p>This is a <strong>sample</strong> HTML document.</p></article></main><footer><p>&copy; 2024</p></footer></body></html>`;
+  const sampleHtml = `<!DOCTYPE html><html><head><title>Test</title></head><body><div><h1>Hello</h1><p>World</p></div></body></html>`;
 
   return (
     <div className="tool-page">
@@ -114,7 +100,7 @@ function HtmlFormatter() {
       <div className="options-panel">
         <div className="options-grid">
           <div className="option-group">
-            <label>Indent Spaces</label>
+            <label>Indent</label>
             <select value={options.indent} onChange={(e) => setOptions({ ...options, indent: parseInt(e.target.value) })}>
               <option value="2">2 spaces</option>
               <option value="4">4 spaces</option>
@@ -123,17 +109,11 @@ function HtmlFormatter() {
         </div>
       </div>
 
-      {/* Action Bar */}
+      {/* Top Action Bar */}
       <div className="action-bar">
         <div className="btn-group">
-          <button className="btn btn-primary" onClick={formatHtml}>
-            Beautify HTML
-          </button>
-          <button className="btn btn-secondary" onClick={minifyHtml}>
-            Minify HTML
-          </button>
           <button className="btn btn-secondary" onClick={() => setInput(sampleHtml)}>
-            Load Sample
+            Sample
           </button>
         </div>
         <div className="btn-group">
@@ -143,8 +123,9 @@ function HtmlFormatter() {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="tool-content">
+      {/* Side by Side Layout */}
+      <div className="tool-content-horizontal">
+        {/* Input Panel */}
         <div className="panel">
           <div className="panel-header">
             <h3>HTML Input</h3>
@@ -160,14 +141,26 @@ function HtmlFormatter() {
           </div>
         </div>
 
+        {/* Format Buttons in Middle */}
+        <div className="convert-button-middle">
+          <button className="btn-convert" onClick={formatHtml}>
+            <FiMaximize2 />
+            Beautify
+          </button>
+          <button className="btn-secondary-small" onClick={minifyHtml}>
+            <FiMinimize2 /> Minify
+          </button>
+        </div>
+
+        {/* Output Panel */}
         <div className="panel">
           <div className="panel-header">
-            <h3>Formatted Output</h3>
+            <h3>Output</h3>
             <div className="btn-group">
-              <button className="btn btn-icon" onClick={handleCopy} title="Copy to clipboard">
+              <button className="btn btn-icon" onClick={handleCopy} title="Copy">
                 {copied ? <FiCheck /> : <FiCopy />}
               </button>
-              <button className="btn btn-icon" onClick={handleDownload} title="Download HTML">
+              <button className="btn btn-icon" onClick={handleDownload} title="Download">
                 <FiDownload />
               </button>
             </div>
