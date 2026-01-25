@@ -225,18 +225,21 @@ function FileConverter() {
     let totalFontSize = 0;
     let fontSizeCount = 0;
 
+    // Helper function to accumulate font sizes
+    const accumulateFontSize = (para) => {
+      para.forEach(line => {
+        totalFontSize += line.avgFontSize;
+        fontSizeCount++;
+      });
+    };
+
     // First pass: extract all text and calculate average font size
     for (let i = 1; i <= pdf.numPages; i++) {
       setProgress(Math.round((i / pdf.numPages) * 30));
       const page = await pdf.getPage(i);
       const paragraphs = await extractStructuredText(page);
       
-      paragraphs.forEach(para => {
-        para.forEach(line => {
-          totalFontSize += line.avgFontSize;
-          fontSizeCount++;
-        });
-      });
+      paragraphs.forEach(accumulateFontSize);
       
       allParagraphs.push({ pageNum: i, paragraphs });
     }
@@ -251,7 +254,7 @@ function FileConverter() {
     const children = [];
     
     allParagraphs.forEach((pageData, pageIndex) => {
-      const { pageNum, paragraphs } = pageData;
+      const { paragraphs } = pageData;
       
       // Add page break between pages (except first page)
       if (pageIndex > 0) {
@@ -279,7 +282,7 @@ function FileConverter() {
           
           if (isBullet) {
             // Remove bullet character and create bullet point
-            const cleanText = text.replace(/^[\u2022\u2023\u25E6\u2043\u2219•●○◦‣⁃\-–—\*]\s*/, '')
+            const cleanText = text.replace(/^[\u2022\u2023\u25E6\u2043\u2219•●○◦‣⁃\-–—*]\s*/, '')
                                   .replace(/^\d+[.)]\s*/, '')
                                   .replace(/^[a-zA-Z][.)]\s*/, '');
             children.push(

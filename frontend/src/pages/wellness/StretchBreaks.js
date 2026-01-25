@@ -109,7 +109,8 @@ const STRETCHES = [
   }
 ];
 
-// Calculate total session duration
+// Calculate total session duration (used for time-based progress)
+// eslint-disable-next-line no-unused-vars
 const TOTAL_DURATION = STRETCHES.reduce((sum, s) => sum + s.duration, 0);
 
 function StretchBreaks() {
@@ -128,12 +129,12 @@ function StretchBreaks() {
   // Calculate overall progress percentage
   const progressPercentage = Math.round((completedStretches.length / STRETCHES.length) * 100);
   
-  // Calculate time-based progress
+  // Calculate time-based progress (used for future features)
+  // eslint-disable-next-line no-unused-vars
   const completedTime = completedStretches.reduce((sum, id) => {
     const stretch = STRETCHES.find(s => s.id === id);
     return sum + (stretch ? stretch.duration : 0);
   }, 0);
-  const timeProgressPercentage = Math.round((completedTime / TOTAL_DURATION) * 100);
 
   // Generate confetti pieces
   const generateConfetti = () => {
