@@ -176,6 +176,23 @@
   background: var(--accent-light);
 }
 
+/* Single item link (not a dropdown) */
+.nav-section-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-section-link.active {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+.nav-section-link.active .section-icon,
+.nav-section-link.active .section-title {
+  color: white;
+}
+
 .section-header-left {
   display: flex;
   align-items: center;

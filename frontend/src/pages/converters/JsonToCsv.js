@@ -3,6 +3,60 @@ import { FiCopy, FiDownload, FiRefreshCw, FiFileText, FiCheck, FiUpload, FiArrow
 import Papa from 'papaparse';
 import '../ToolPage.css';
 
+// Flatten nested objects with dot notation
+const flattenObject = (obj, prefix = '') => {
+  const result = {};
+  
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      const value = obj[key];
+      
+      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+        Object.assign(result, flattenObject(value, newKey));
+      } else if (Array.isArray(value)) {
+        // Convert arrays to JSON string
+        result[newKey] = JSON.stringify(value);
+      } else {
+        result[newKey] = value;
+      }
+    }
+  }
+  
+  return result;
+};
+
+// Convert any JSON structure to an array of flat objects
+const normalizeJsonToCsvData = (data) => {
+  // If it's an array
+  if (Array.isArray(data)) {
+    if (data.length === 0) {
+      return [];
+    }
+    
+    // Check if it's an array of primitives
+    if (data.every(item => typeof item !== 'object' || item === null)) {
+      return data.map((item, index) => ({ index, value: item }));
+    }
+    
+    // Array of objects - flatten each one
+    return data.map(item => {
+      if (typeof item === 'object' && item !== null) {
+        return flattenObject(item);
+      }
+      return { value: item };
+    });
+  }
+  
+  // If it's a single object
+  if (typeof data === 'object' && data !== null) {
+    return [flattenObject(data)];
+  }
+  
+  // Primitive value
+  return [{ value: data }];
+};
+
 function JsonToCsv() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -22,13 +76,14 @@ function JsonToCsv() {
 
     try {
       const data = JSON.parse(input);
+      const normalizedData = normalizeJsonToCsvData(data);
       
-      if (!Array.isArray(data)) {
-        setError('JSON must be an array of objects');
+      if (normalizedData.length === 0) {
+        setError('Empty JSON data');
         return;
       }
 
-      const csv = Papa.unparse(data, {
+      const csv = Papa.unparse(normalizedData, {
         header: options.header,
         delimiter: options.delimiter
       });
@@ -72,11 +127,18 @@ function JsonToCsv() {
     }
   };
 
-  const sampleJson = `[
-  { "name": "John Doe", "age": 28, "email": "john@example.com" },
-  { "name": "Jane Smith", "age": 34, "email": "jane@example.com" },
-  { "name": "Bob Johnson", "age": 45, "email": "bob@example.com" }
-]`;
+  const sampleJson = `{
+  "user": {
+    "name": "John Doe",
+    "age": 28,
+    "contact": {
+      "email": "john@example.com",
+      "phone": "555-1234"
+    }
+  },
+  "company": "TechCorp",
+  "active": true
+}`;
 
   return (
     <div className="tool-page">
@@ -85,7 +147,7 @@ function JsonToCsv() {
           <span className="icon"><FiFileText /></span>
           JSON → CSV Converter
         </h1>
-        <p>Convert JSON array data to CSV format</p>
+        <p>Convert any JSON structure (objects, arrays, nested data) to CSV format</p>
       </div>
 
       {/* Options Panel */}

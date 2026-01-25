@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiCode, FiFileText, FiTool, FiClock, FiArrowRight, FiZap, FiGlobe, FiShield, FiCpu } from 'react-icons/fi';
+import { FiCode, FiFileText, FiTool, FiArrowRight, FiZap, FiGlobe, FiShield, FiCpu, FiFile, FiHeart } from 'react-icons/fi';
 import './Home.css';
 
 const categories = [
@@ -16,6 +16,19 @@ const categories = [
       { name: 'XML → JSON', path: '/tools/xml-to-json' },
       { name: 'YAML → JSON', path: '/tools/yaml-to-json' },
       { name: 'SVG → Code', path: '/tools/svg-to-code' },
+    ]
+  },
+  {
+    id: 'fileconverters',
+    title: 'File Conversions',
+    description: 'Convert PDF, Word, Images & more',
+    icon: <FiFile />,
+    color: '#f59e0b',
+    singleLink: '/tools/file-converter',
+    tools: [
+      { name: 'PDF ↔ Word', path: '/tools/file-converter' },
+      { name: 'PDF ↔ DOC', path: '/tools/file-converter' },
+      { name: 'Images ↔ PDF', path: '/tools/file-converter' },
     ]
   },
   {
@@ -45,13 +58,15 @@ const categories = [
     ]
   },
   {
-    id: 'devodoro',
-    title: 'Devodoro',
-    description: 'Developer-focused productivity',
-    icon: <FiClock />,
+    id: 'wellness',
+    title: "Developer's Wellness",
+    description: 'Stay healthy while coding',
+    icon: <FiHeart />,
     color: '#10b981',
     tools: [
-      { name: 'Focus Timer', path: '/devodoro' },
+      { name: 'Devodoro', path: '/wellness/devodoro' },
+      { name: 'Stretch Breaks', path: '/wellness/stretch-breaks' },
+      { name: 'Breathing Reset', path: '/wellness/breathing-reset' },
     ]
   },
 ];
@@ -151,6 +166,10 @@ function Home() {
             <span className="quick-icon">{ }</span>
             <span className="quick-name">JSON Formatter</span>
           </Link>
+          <Link to="/tools/file-converter" className="quick-card">
+            <span className="quick-icon">📄</span>
+            <span className="quick-name">File Converter</span>
+          </Link>
           <Link to="/tools/uuid-generator" className="quick-card">
             <span className="quick-icon">#</span>
             <span className="quick-name">UUID Generator</span>
@@ -159,17 +178,13 @@ function Home() {
             <span className="quick-icon">&lt;/&gt;</span>
             <span className="quick-name">SVG → Code</span>
           </Link>
-          <Link to="/devodoro" className="quick-card">
+          <Link to="/wellness/devodoro" className="quick-card">
             <span className="quick-icon">⏱</span>
-            <span className="quick-name">Devodoro Timer</span>
+            <span className="quick-name">Devodoro</span>
           </Link>
           <Link to="/tools/password-generator" className="quick-card">
             <span className="quick-icon">🔐</span>
             <span className="quick-name">Password Gen</span>
-          </Link>
-          <Link to="/tools/regex-tester" className="quick-card">
-            <span className="quick-icon">.*</span>
-            <span className="quick-name">Regex Tester</span>
           </Link>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiCode, FiFileText, FiTool, FiClock, FiChevronDown, FiChevronRight, FiHome, FiZap, FiSun, FiMoon, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
+import { FiMenu, FiX, FiCode, FiFileText, FiTool, FiChevronDown, FiChevronRight, FiHome, FiZap, FiSun, FiMoon, FiChevronsLeft, FiChevronsRight, FiFile, FiHeart } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
 import './Layout.css';
 
@@ -18,6 +18,13 @@ const menuItems = [
       { name: 'HTML → Markdown', path: '/tools/html-to-markdown' },
       { name: 'SVG → Code', path: '/tools/svg-to-code' },
     ]
+  },
+  {
+    id: 'fileconverters',
+    title: 'File Conversions',
+    icon: <FiFile />,
+    path: '/tools/file-converter',
+    singleItem: true
   },
   {
     id: 'formatters',
@@ -46,11 +53,13 @@ const menuItems = [
     ]
   },
   {
-    id: 'devodoro',
-    title: 'Devodoro',
-    icon: <FiClock />,
+    id: 'wellness',
+    title: "Developer's Wellness",
+    icon: <FiHeart />,
     items: [
-      { name: 'Focus Timer', path: '/devodoro' },
+      { name: 'Devodoro', path: '/wellness/devodoro' },
+      { name: 'Stretch Breaks', path: '/wellness/stretch-breaks' },
+      { name: 'Breathing Reset', path: '/wellness/breathing-reset' },
     ]
   },
 ];
@@ -121,35 +130,53 @@ function Layout({ children }) {
 
           {menuItems.map((section) => (
             <div key={section.id} className="nav-section">
-              <button
-                className={`nav-section-header ${isActiveSection(section) ? 'active' : ''}`}
-                onClick={() => toggleSection(section.id)}
-                title={!sidebarOpen ? section.title : ''}
-              >
-                <div className="section-header-left">
-                  <span className="section-icon">{section.icon}</span>
-                  {sidebarOpen && <span className="section-title">{section.title}</span>}
-                </div>
-                {sidebarOpen && (
-                  <span className="section-chevron">
-                    {expandedSections.includes(section.id) ? <FiChevronDown /> : <FiChevronRight />}
-                  </span>
-                )}
-              </button>
-              
-              {sidebarOpen && (
-                <div className={`nav-section-items ${expandedSections.includes(section.id) ? 'expanded' : ''}`}>
-                  {section.items.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={`nav-item ${isActiveItem(item.path) ? 'active' : ''}`}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
+              {section.singleItem ? (
+                /* Single item - render as a direct link */
+                <Link
+                  to={section.path}
+                  className={`nav-section-header nav-section-link ${isActiveItem(section.path) ? 'active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                  title={!sidebarOpen ? section.title : ''}
+                >
+                  <div className="section-header-left">
+                    <span className="section-icon">{section.icon}</span>
+                    {sidebarOpen && <span className="section-title">{section.title}</span>}
+                  </div>
+                </Link>
+              ) : (
+                /* Regular dropdown section */
+                <>
+                  <button
+                    className={`nav-section-header ${isActiveSection(section) ? 'active' : ''}`}
+                    onClick={() => toggleSection(section.id)}
+                    title={!sidebarOpen ? section.title : ''}
+                  >
+                    <div className="section-header-left">
+                      <span className="section-icon">{section.icon}</span>
+                      {sidebarOpen && <span className="section-title">{section.title}</span>}
+                    </div>
+                    {sidebarOpen && (
+                      <span className="section-chevron">
+                        {expandedSections.includes(section.id) ? <FiChevronDown /> : <FiChevronRight />}
+                      </span>
+                    )}
+                  </button>
+                  
+                  {sidebarOpen && section.items && (
+                    <div className={`nav-section-items ${expandedSections.includes(section.id) ? 'expanded' : ''}`}>
+                      {section.items.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`nav-item ${isActiveItem(item.path) ? 'active' : ''}`}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ))}

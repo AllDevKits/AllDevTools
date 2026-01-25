@@ -10,6 +10,9 @@ import YamlToJson from './pages/converters/YamlToJson';
 import MarkdownToHtml from './pages/converters/MarkdownToHtml';
 import HtmlToMarkdown from './pages/converters/HtmlToMarkdown';
 import SvgToCode from './pages/converters/SvgToCode';
+// File Converter (unified)
+import FileConverter from './pages/fileconverters/FileConverter';
+// Formatters
 import JsonFormatter from './pages/formatters/JsonFormatter';
 import SqlFormatter from './pages/formatters/SqlFormatter';
 import HtmlFormatter from './pages/formatters/HtmlFormatter';
@@ -22,7 +25,10 @@ import LoremGenerator from './pages/generators/LoremGenerator';
 import SlugGenerator from './pages/generators/SlugGenerator';
 import ColorGenerator from './pages/generators/ColorGenerator';
 import JwtDecoder from './pages/generators/JwtDecoder';
-import Devodoro from './pages/devodoro/Devodoro';
+// Developer's Wellness
+import Devodoro from './pages/wellness/Devodoro';
+import StretchBreaks from './pages/wellness/StretchBreaks';
+import BreathingReset from './pages/wellness/BreathingReset';
 import './App.css';
 
 function App() {
@@ -40,6 +46,8 @@ function App() {
             <Route path="/tools/markdown-to-html" element={<MarkdownToHtml />} />
             <Route path="/tools/html-to-markdown" element={<HtmlToMarkdown />} />
             <Route path="/tools/svg-to-code" element={<SvgToCode />} />
+            {/* File Converter (unified) */}
+            <Route path="/tools/file-converter" element={<FileConverter />} />
             {/* Formatters */}
             <Route path="/tools/json-formatter" element={<JsonFormatter />} />
             <Route path="/tools/sql-formatter" element={<SqlFormatter />} />
@@ -54,8 +62,10 @@ function App() {
             <Route path="/tools/slug-generator" element={<SlugGenerator />} />
             <Route path="/tools/color-generator" element={<ColorGenerator />} />
             <Route path="/tools/jwt-decoder" element={<JwtDecoder />} />
-            {/* Devodoro */}
-            <Route path="/devodoro" element={<Devodoro />} />
+            {/* Developer's Wellness */}
+            <Route path="/wellness/devodoro" element={<Devodoro />} />
+            <Route path="/wellness/stretch-breaks" element={<StretchBreaks />} />
+            <Route path="/wellness/breathing-reset" element={<BreathingReset />} />
           </Routes>
         </Layout>
       </Router>
