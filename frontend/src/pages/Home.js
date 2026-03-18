@@ -189,11 +189,129 @@ function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="home-footer">
-        <p>Built with ❤️ for developers everywhere</p>
-        <p className="footer-copyright">© 2026 AllDevTools</p>
-      </footer>
+      {/* About Section */}
+      <section className="about">
+        <div className="section-header">
+          <h2>Why Choose AllDevTools?</h2>
+          <p>Everything developers need in one comprehensive suite</p>
+        </div>
+        
+        <div className="about-content">
+          <div className="about-text">
+            <p>
+              AllDevTools is a comprehensive collection of developer utilities designed to streamline your workflow 
+              and boost productivity. Whether you're converting data formats, formatting code, generating test data, 
+              or maintaining your coding wellness, we have the tools you need.
+            </p>
+            <p>
+              Built with modern web technologies, all our tools run directly in your browser, ensuring your data 
+              never leaves your device. This approach guarantees privacy, speed, and reliability for all your 
+              development tasks.
+            </p>
+            <p>
+              Our suite includes powerful converters for transforming between different data formats like JSON, 
+              CSV, XML, YAML, and more. Code formatters help you maintain clean, readable code in multiple 
+              programming languages. Generators create everything from UUIDs and passwords to lorem ipsum text 
+              and color palettes.
+            </p>
+            <p>
+              We also prioritize developer wellness with tools like Devodoro (a Pomodoro timer adapted for 
+              developers), stretch break reminders, and breathing exercises to help you maintain focus and 
+              physical health during long coding sessions.
+            </p>
+          </div>
+          <div className="about-stats">
+            <div className="stat">
+              <span className="stat-number">20+</span>
+              <span className="stat-label">Tools Available</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">100%</span>
+              <span className="stat-label">Privacy Focused</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">0</span>
+              <span className="stat-label">Data Collection</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Detail Section */}
+      <section className="features-detail">
+        <div className="section-header">
+          <h2>Powerful Features</h2>
+          <p>Explore what makes our tools exceptional</p>
+        </div>
+
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon-large">
+              <FiCode />
+            </div>
+            <h3>Data Conversion</h3>
+            <p>
+              Seamlessly convert between popular data formats including JSON, CSV, XML, YAML, and SVG. 
+              Our conversion tools handle complex nested structures and preserve data integrity during transformation.
+            </p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon-large">
+              <FiFileText />
+            </div>
+            <h3>Code Formatting</h3>
+            <p>
+              Format and validate code in multiple languages including JSON, SQL, HTML, CSS, and JavaScript. 
+              Our formatters include syntax highlighting, error detection, and customizable formatting options.
+            </p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon-large">
+              <FiTool />
+            </div>
+            <h3>Data Generation</h3>
+            <p>
+              Generate test data, UUIDs, secure passwords, lorem ipsum text, and color palettes. 
+              Perfect for development, testing, and design workflows.
+            </p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon-large">
+              <FiFile />
+            </div>
+            <h3>File Processing</h3>
+            <p>
+              Convert between document formats including PDF, Word documents, and images. 
+              Process files directly in your browser without uploading to external servers.
+            </p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon-large">
+              <FiHeart />
+            </div>
+            <h3>Developer Wellness</h3>
+            <p>
+              Maintain coding health with Pomodoro timers, stretch break reminders, and breathing exercises. 
+              Designed specifically for developers to prevent burnout and maintain productivity.
+            </p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon-large">
+              <FiShield />
+            </div>
+            <h3>Privacy & Security</h3>
+            <p>
+              All processing happens locally in your browser. Your code, data, and files never leave your device, 
+              ensuring complete privacy and security for sensitive development work.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

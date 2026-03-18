@@ -60,6 +60,35 @@ function UuidGenerator() {
         <p>Generate unique identifiers instantly (UUID v4)</p>
       </div>
 
+      {/* Tool Description */}
+      <div className="tool-description">
+        <div className="description-content">
+          <h3>UUID v4 Format:</h3>
+          <p>The standard format is: <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code></p>
+          <ul>
+            <li>32 hexadecimal digits (0-9, a-f)</li>
+            <li>Divided into 5 groups separated by hyphens</li>
+            <li>Version 4 indicated by the '4' in the 13th position</li>
+            <li>Variant bits set according to RFC 4122</li>
+          </ul>
+
+          <h3>Key Features:</h3>
+          <ul>
+            <li><strong>RFC 4122 Compliant:</strong> Follows the official UUID standard</li>
+            <li><strong>Cryptographically Secure:</strong> Uses random number generation</li>
+            <li><strong>Multiple Formats:</strong> Standard, uppercase, and dash-free options</li>
+            <li><strong>Bulk Generation:</strong> Generate multiple UUIDs at once</li>
+            <li><strong>Copy to Clipboard:</strong> Easy copying of individual or all UUIDs</li>
+          </ul>
+          <h3>Why UUID v4?</h3>
+          <p>
+            UUID v4 is preferred for most applications because it generates completely random identifiers 
+            without any metadata (unlike v1 which includes timestamp and MAC address). This ensures privacy 
+            and makes it impossible to guess or predict UUIDs.
+          </p>
+        </div>
+      </div>
+
       {/* Options Panel */}
       <div className="options-panel">
         <div className="options-grid">

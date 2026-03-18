@@ -49,6 +49,53 @@
   font-size: 1rem;
 }
 
+/* Tool Description */
+.tool-description {
+  margin-bottom: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+}
+
+.description-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.description-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+  color: var(--text-primary);
+}
+
+.description-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.description-content ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.description-content li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.description-content li strong {
+  color: var(--text-primary);
+}
+
 /* Options Panel */
 .options-panel {
   background: var(--bg-card);

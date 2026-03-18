@@ -112,7 +112,22 @@ function JsonFormatter() {
           <span className="icon"><FiCode /></span>
           JSON Formatter & Validator
         </h1>
-        <p>Format, validate, and beautify your JSON data</p>
+        <p>Format, validate, and beautify your JSON data with advanced features</p>
+      </div>
+
+      {/* Tool Description */}
+      <div className="tool-description">
+        <div className="description-content">
+          <h3>Key Features:</h3>
+          <ul>
+            <li><strong>Validation:</strong> Instantly check if your JSON is syntactically correct</li>
+            <li><strong>Beautification:</strong> Format compressed JSON with proper indentation and spacing</li>
+            <li><strong>Minification:</strong> Compress JSON to reduce file size</li>
+            <li><strong>Key Sorting:</strong> Alphabetically sort object keys for consistency</li>
+            <li><strong>Statistics:</strong> Get insights about your JSON structure and size</li>
+            <li><strong>File Support:</strong> Upload JSON files directly or paste content</li>
+          </ul>
+        </div>
       </div>
 
       {/* Options Panel */}
