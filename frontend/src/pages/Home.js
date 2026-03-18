@@ -67,6 +67,8 @@ const categories = [
       { name: 'Devodoro', path: '/wellness/devodoro' },
       { name: 'Stretch Breaks', path: '/wellness/stretch-breaks' },
       { name: 'Breathing Reset', path: '/wellness/breathing-reset' },
+      { name: 'Road Fighter', path: '/wellness/road-fighter' },
+      { name: '2048 Game', path: '/wellness/2048' },
     ]
   },
 ];

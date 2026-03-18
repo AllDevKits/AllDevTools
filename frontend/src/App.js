@@ -29,6 +29,8 @@ import JwtDecoder from './pages/generators/JwtDecoder';
 import Devodoro from './pages/wellness/Devodoro';
 import StretchBreaks from './pages/wellness/StretchBreaks';
 import BreathingReset from './pages/wellness/BreathingReset';
+import RoadFighter from './pages/wellness/RoadFighter';
+import Game2048 from './pages/wellness/Game2048';
 import './App.css';
 
 function App() {
@@ -66,6 +68,8 @@ function App() {
             <Route path="/wellness/devodoro" element={<Devodoro />} />
             <Route path="/wellness/stretch-breaks" element={<StretchBreaks />} />
             <Route path="/wellness/breathing-reset" element={<BreathingReset />} />
+            <Route path="/wellness/road-fighter" element={<RoadFighter />} />
+            <Route path="/wellness/2048" element={<Game2048 />} />
           </Routes>
         </Layout>
       </Router>
